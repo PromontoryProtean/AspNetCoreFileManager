@@ -1,0 +1,43 @@
+﻿@model FileManagerViewModel
+
+@if (Model.FileManagerItems.Count() == 0)
+{
+    <p>
+        This directory is empty.
+    </p>
+}
+else
+{
+    <div class="tile-list-wrap">
+        <form id="file-manager-form" asp-controller="FileManager" asp-action="BulkDelete">
+            <ul class="tile-list">
+                @foreach (var fmi in Model.FileManagerItems)
+                {
+                    <li>
+                        <div class="tile-wrap">
+                            @if (fmi.ItemType == FileManagerItemType.Directory)
+                            {
+                                <a href="@fmi.BrowseUrl">
+                                    <img alt="@fmi.Name" src="@fmi.ThumbnailUrl" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@fmi.BrowseUrl">
+                                    <img alt="@fmi.Name" src="@fmi.ThumbnailUrl" />
+                                </a>
+                            }
+                        </div>
+                        <div class="tile-name">
+                            <label><input name="DeletePaths" type="checkbox" value="@(Model.CurrentDirectory + "/" + fmi.Name)" class="details-view-item-checkbox" /> @fmi.Name</label>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </form>
+        <div class="tile-details">
+            <h2>File Details</h2>
+            Click a file to see file details.
+        </div>
+    </div>
+}

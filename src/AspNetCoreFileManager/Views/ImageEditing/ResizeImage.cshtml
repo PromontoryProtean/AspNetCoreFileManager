@@ -1,0 +1,46 @@
+﻿@model ResizeImageUploadViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ASP.NET Core File Manager - Resize Image</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1>Resize Image</h1>
+        <p>Note - Passing zero for either height or width will automatically preserve the aspect ratio of the original image.</p>
+        <div class="row">
+            <div class="col-md-3">
+                <form asp-controller="ImageEditing" asp-action="ResizeImage" enctype="multipart/form-data">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Width">Width</label>
+                        <input asp-for="Width" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Height">Height</label>
+                        <input asp-for="Height" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input type="file" asp-for="FormFile">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(ViewBag.UploadedFilePath))
+        {
+            <p>Processing time in seconds: @ViewBag.ProcessingTime</p>
+            <img src="@ViewBag.UploadedFilePath" alt="Uploaded Image" />
+        }
+    </div>
+</body>
+</html>

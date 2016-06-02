@@ -1,0 +1,127 @@
+﻿@model FileManagerViewModel
+
+@*TODO: decide what icon alt text should say*@
+@*TODO: ajax*@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ASP.NET Core File Manager</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="/css/file-manager.css" rel="stylesheet" />
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="/scripts/js.cookie/js.cookie-2.1.0.min.js"></script>
+    <script src="/scripts/plupload/plupload.full.min.js"></script>
+    <script src="/scripts/plupload/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+    <script src="/scripts/file-manager.js"></script>
+    <script type="text/javascript">
+        var currentDir = "@Model.CurrentDirectory";
+    </script>
+</head>
+<body>
+    <div class="container-fluid">
+        <h1>ASP.NET Core File Manager</h1>
+        @if (TempData["MessageBusSuccess"] != null)
+        {
+            <div class="alert alert-success">
+                @TempData["MessageBusSuccess"]
+            </div>
+        }
+        @if (TempData["MessageBusAlert"] != null)
+        {
+            <div class="alert alert-danger">
+                @TempData["MessageBusAlert"]
+            </div>
+        }
+        <div class="table-toolbar">
+            <div id="file-view-mode-btn-group" class="btn-group" data-toggle="buttons">
+                <label class="@(Model.ViewMode == FileManagerViewMode.Details ? "btn btn-primary active" : "btn btn-primary" )">
+                    <input type="radio" name="file-manager-view-mode" value="Details">
+                    <i class="fa fa-list"></i>
+                </label>
+                <label class="@(Model.ViewMode == FileManagerViewMode.Tiles ? "btn btn-primary active" : "btn btn-primary" )">
+                    <input type="radio" name="file-manager-view-mode" value="Tiles">
+                    <i class="fa fa-th"></i>
+                </label>
+            </div>
+            <div id="start-directory-btn-group" class="btn-group" data-toggle="buttons">
+                <label class="@(!Model.CurrentDirectory.StartsWith("/secure-files") ? "btn btn-primary active" : "btn btn-primary")">
+                    <input type="radio" name="start-directory" value="@Context.Request.Path">
+                    Public Files
+                </label>
+                <label class="@(Model.CurrentDirectory.StartsWith("/secure-files") ? "btn btn-primary active" : "btn btn-primary")">
+                    <input type="radio" name="start-directory" value="@(Context.Request.Path + "?dir=%2fsecure-files")" checked="@Model.CurrentDirectory.StartsWith("/secure-files")">
+                    Secure Files
+                </label>
+            </div>
+            <button id="create-directory-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#create-directory-dialog">Create a Directory</button>
+            <button id="upload-files-button" type="button" class="btn btn-primary" data-toggle="modal" data-target="#upload-files-dialog">Upload Files</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                    Bulk Actions <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <a href="javascript:document.getElementById('file-manager-form').submit();" onclick="return confirm('Deleting directories and files cannot be undone. Are you sure you want to delete the selected items?');">Delete Files</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="breadcrumbs-wrap">
+            <span>Current Directory: </span>
+            @Html.Raw(Model.Breadcrumbs)
+        </div>
+        @if (Model.ViewMode == FileManagerViewMode.Details)
+        {
+            @Html.Partial("_DetailsViewPartial", Model)
+        }
+        else
+        {
+            @Html.Partial("_TileViewPartial", Model)
+        }
+        <div class="modal fade" id="create-directory-dialog" tabindex="-1" role="dialog" aria-labelledby="create-directory-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="create-directory-label">Create a Directory</h4>
+                    </div>
+                    <div class="modal-body">
+                        @Html.Partial("_CreateDirectoryPartial", new FileManagerDirectoryViewModel())
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="upload-files-dialog" tabindex="-1" role="dialog" aria-labelledby="upload-files-label" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="upload-files-label">Upload Files</h4>
+                    </div>
+                    <div class="modal-body">
+                        @*<p>
+                            <strong>Image Settings</strong><br />
+                            <asp:Label ID="DoResizeImagesLabel" runat="server" AssociatedControlID="DoResizeImages">Resize Images</asp:Label>
+                            <asp:CheckBox ID="DoResizeImages" runat="server" ClientIDMode="Static" Checked="true" />
+                            &nbsp;&nbsp;
+                            <asp:Label ID="WidthLabel" runat="server" AssociatedControlID="WidthField">Width</asp:Label>
+                            <asp:TextBox ID="WidthField" runat="server" CssClass="textbox-small" Text="1200" ClientIDMode="Static" />
+                            &nbsp;&nbsp;
+                            <asp:Label ID="HeightLabel" runat="server" AssociatedControlID="HeightField">Height</asp:Label>
+                            <asp:TextBox ID="HeightField" runat="server" CssClass="textbox-small" Text="1200" ClientIDMode="Static" />
+                            </p>*@
+                        <div id="uploader">
+                            <p>You browser does not support HTML5.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

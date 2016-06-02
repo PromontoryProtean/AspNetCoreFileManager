@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5E451F29-EEB5-4D6F-A854-D5E0CF4291D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6FF08D5C-B44F-413E-B0A9-A57C537E1B3E}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AspNetCoreFileManager", "src\AspNetCoreFileManager\AspNetCoreFileManager.xproj", "{2079FE5D-3403-4B09-A935-F2BEDF88DCEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2079FE5D-3403-4B09-A935-F2BEDF88DCEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2079FE5D-3403-4B09-A935-F2BEDF88DCEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2079FE5D-3403-4B09-A935-F2BEDF88DCEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2079FE5D-3403-4B09-A935-F2BEDF88DCEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2079FE5D-3403-4B09-A935-F2BEDF88DCEB} = {5E451F29-EEB5-4D6F-A854-D5E0CF4291D7}
+	EndGlobalSection
+EndGlobal

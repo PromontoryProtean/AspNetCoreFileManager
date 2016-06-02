@@ -1,0 +1,72 @@
+﻿@model FileManagerViewModel
+
+@if (Model.FileManagerItems.Count() == 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Directory/File Name</th>
+                <th>Last Modified</th>
+                <th>Size</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="4">This directory is empty.</td>
+            </tr>
+        </tbody>
+    </table>
+}
+else
+{
+    <form id="file-manager-form" asp-controller="FileManager" asp-action="BulkDelete">
+        <table class="table table-striped file-manager">
+            <thead>
+                <tr>
+                    <th class="checkbox-column">
+                        <input id="select-all-checkbox" type="checkbox" onchange="ToggleCheckboxes(this)" />
+                    </th>
+                    <th>Directory/File Name</th>
+                    <th>Last Modified</th>
+                    <th>Size</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var fmi in Model.FileManagerItems)
+                {
+                    <tr>
+                        <td class="checkbox-column">
+                            <input name="DeletePaths" type="checkbox" value="@(Model.CurrentDirectory + "/" + fmi.Name)" class="details-view-item-checkbox" />
+                        </td>
+                        <td>
+                            <i class="@fmi.IconClass"></i>
+                            @if (fmi.ItemType == FileManagerItemType.Directory)
+                            {
+                                <a href="@fmi.BrowseUrl">@fmi.Name</a>
+                            }
+                            else
+                            {
+                                @fmi.Name
+                            }
+                        </td>
+                        <td>
+                            @fmi.LastModified.ToString("M/d/yyyy h:mm tt")
+                        </td>
+                        <td>
+                            @fmi.Size
+                        </td>
+                        <td class="text-right command-col">
+                            @if (fmi.ItemType == FileManagerItemType.File)
+                            {
+                                <a asp-controller="FileManager" asp-action="DownloadFile" asp-route-file="@(Model.CurrentDirectory + "/" + fmi.Name)">Download</a>
+                            }
+                            <a href="@fmi.DeleteUrl" onclick="return confirm('@fmi.DeleteWarning');">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </form>
+}
