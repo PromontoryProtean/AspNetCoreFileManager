@@ -13,13 +13,10 @@ namespace AspNetCoreFileManager.Web.Controllers
     [Route("file-manager")]
     public class FileManagerController : Controller
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-
         private readonly IFileManagerService _fileManagerService;
 
-        public FileManagerController(IHostingEnvironment hostingEnvironment, IFileManagerService fileManagerService)
+        public FileManagerController(IFileManagerService fileManagerService)
         {
-            _hostingEnvironment = hostingEnvironment;
             _fileManagerService = fileManagerService;
         }
 

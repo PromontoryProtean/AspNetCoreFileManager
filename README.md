@@ -1,5 +1,5 @@
 # AspNetCoreFileManager
-A web based file manager running on ASP.NET Core. The project is currently built on ASP.NET Core R2. Feedback, suggestions, contributions etc. are welcome.
+A web based file manager running on ASP.NET Core. The project is currently built on ASP.NET Core RTM. Feedback, suggestions, contributions etc. are welcome.
 
 This project began with a need to evaluate ImageProcessor, and grew into a proof-of-concept web application to demonstrate how various open source projects can be combined to create a web-based file manager. It can be integrated into more complex applications such as content management systems, corporate intranets etc.
 

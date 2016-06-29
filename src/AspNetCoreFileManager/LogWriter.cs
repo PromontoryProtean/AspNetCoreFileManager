@@ -13,17 +13,17 @@ namespace AspNetCoreFileManager
 
         public void Write(string logContent)
         {
-            using (var sw = File.AppendText(_logPath))
+            using (var streamWriter = File.AppendText(_logPath))
             {
-                sw.Write(logContent);
+                streamWriter.Write(logContent);
             }
         }
 
         public void WriteLine(string lineText)
         {
-            using (var sw = File.AppendText(_logPath))
+            using (var streamWriter = File.AppendText(_logPath))
             {
-                sw.WriteLine(lineText);
+                streamWriter.WriteLine(lineText);
             }
         }
     }
